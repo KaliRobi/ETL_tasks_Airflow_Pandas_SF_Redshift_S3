@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "name": "Alice Johnson",
+        "email": "alice@example.com",
+        "created_at": "2024-03-01T10:00:00Z"
+    },
+    {
+        "id": 2,
+        "name": "Bob Smith",
+        "email": "bob@example.com",
+        "created_at": "2024-03-02T11:15:00Z"
+    },
+    {
+        "id": 3,
+        "name": "Charlie Brown",
+        "email": "charlie@example.com",
+        "created_at": "2024-03-03T12:30:00Z"
+    },
+    {
+        "id": 4,
+        "name": "Diana Prince",
+        "email": "diana@example.com",
+        "created_at": "2024-03-04T13:45:00Z"
+    },
+    {
+        "id": 5,
+        "name": "Edward Norton",
+        "email": "edward@example.com",
+        "created_at": "2024-03-05T14:00:00Z"
+    },
+    {
+        "id": 6,
+        "name": "Fiona Gallagher",
+        "email": "fiona@example.com",
+        "created_at": "2024-03-06T15:15:00Z"
+    },
+    {
+        "id": 7,
+        "name": "George Lucas",
+        "email": "george@example.com",
+        "created_at": "2024-03-07T16:30:00Z"
+    },
+    {
+        "id": 8,
+        "name": "Hannah Montana",
+        "email": "hannah@example.com",
+        "created_at": "2024-03-08T17:45:00Z"
+    },
+    {
+        "id": 9,
+        "name": "Ian McKellen",
+        "email": "ian@example.com",
+        "created_at": "2024-03-09T18:00:00Z"
+    },
+    {
+        "id": 10,
+        "name": "Jessica Jones",
+        "email": "jessica@example.com",
+        "created_at": "2024-03-10T19:15:00Z"
+    }
+]
