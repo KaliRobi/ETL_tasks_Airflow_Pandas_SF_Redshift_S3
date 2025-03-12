@@ -1,0 +1,52 @@
+Task1
+
+Task 1: Cleaning Missing Values (Climate Data) 
+
+Dataset: climate_data.csv 
+Tool: Pandas 
+
+Task: 
+
+    Load the CSV dataset into a Pandas DataFrame. 
+
+    Check for any missing values in the columns. 
+
+    For numerical columns like "temperature" or "humidity," fill missing values with the mean or median. 
+
+    For categorical columns, replace missing values with the mode (most frequent value). 
+
+    Drop rows with missing date values 
+
+Expected Result: 
+
+    A cleaned DataFrame with no missing values in the relevant columns. 
+
+    Print the first 5 rows of the cleaned DataFrame to verify the transformation. 
+
+#############################################################################################################
+
+
+Task 2: Cleaning Missing Values (Weather Data)
+
+Dataset: climate_data.csv 
+Tool: Pandas
+
+Task:
+
+    Load the CSV dataset into a Pandas DataFrame.
+
+    Check for missing values in all columns.
+
+    Handle missing values:
+
+        For numerical columns like temperature and wind_speed, fill missing values with the median.
+
+        For categorical columns like location, replace missing values with the mode (most frequent value).
+
+        Drop rows where the time column has missing values (as it's critical data).
+
+    Verify the cleaned DataFrame:
+
+        Print the first 5 rows of the cleaned DataFrame.
+
+        Print the count of missing values in each column after cleaning.
