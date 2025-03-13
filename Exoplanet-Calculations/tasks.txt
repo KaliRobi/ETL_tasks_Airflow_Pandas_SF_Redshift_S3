@@ -1,0 +1,74 @@
+### **Task 1: Habitability Score Calculation & Normalization**  
+#### **Goal:** Engineer a new feature, `habitability_score`, using multiple columns and normalize it.  
+
+#### **Steps:**  
+1. Define a habitability score based on:  
+   - **Surface temperature** (closer to Earth's ~288K is better)  
+   - **Water presence probability** (higher is better)  
+   - **Atmospheric composition** (give weights to O2-N2 > CO2 > H2-He > Unknown)  
+   - **Gravitational force** (closer to Earth's 1G is better)  
+2. Combine these factors into a formula to compute a `habitability_score`.  
+3. Normalize the score between **0 and 1** using Min-Max scaling.  
+
+#### **Skills Practiced:** Feature Engineering, Min-Max Scaling, Conditional Weighting  
+
+--------------------------------------------------------------------------------------------
+
+### **Task 2: Detect and Remove Outliers in Orbital Periods**  
+#### **Goal:** Identify and filter out exoplanets with extreme orbital periods using the **IQR method**.  
+
+#### **Steps:**  
+1. Compute the **Interquartile Range (IQR)** for `orbital_period_days`.  
+2. Define outliers as values **below Q1 - 1.5 * IQR** or **above Q3 + 1.5 * IQR**.  
+3. Remove outliers and create a **new cleaned dataset**.  
+
+#### **Skills Practiced:** Outlier Detection, Data Cleaning  
+
+------------------------------------------------------------------------------------------
+
+### **Task 3: Categorizing Planets Based on Discovery Trends**  
+#### **Goal:** Group exoplanets into **Discovery Eras** and analyze trends.  
+
+#### **Steps:**  
+1. Create a **new categorical column `discovery_era`** based on `discovery_year`:  
+   - 1990–1999 → "Early Discoveries"  
+   - 2000–2009 → "Kepler Era"  
+   - 2010–2019 → "Modern Discoveries"  
+   - 2020+ → "Next-Gen Telescopes"  
+2. Count the number of planets discovered in each era.  
+3. Generate a **pivot table** showing the number of discoveries per `detection_method` in each era.  
+
+#### **Skills Practiced:** Conditional Column Creation, Aggregation, Pivot Tables  
+
+----------------------------------------------------------------------------------------------
+
+### **Task 4: Create a Summary Report for Each Host Star Temperature Range**  
+#### **Goal:** Generate a **grouped summary report** for different host star temperature ranges.  
+
+#### **Steps:**  
+1. **Bin `host_star_temperature_K`** into the following categories:  
+   - **Cool Stars**: < 4000K  
+   - **Sun-like Stars**: 4000K–6000K  
+   - **Hot Stars**: > 6000K  
+2. Group by these categories and calculate:  
+   - **Average planet radius**  
+   - **Median orbital period**  
+   - **Max water presence probability**  
+3. Format the result as a **clean Pandas DataFrame summary**.  
+
+
+
+---------------------------------------------------------------------------------
+
+### **Task 5: Simulating Missing Data and Imputation Strategies**  
+#### **Goal:** Introduce missing values and practice different imputation techniques.  
+
+#### **Steps:**  
+1. Randomly **drop values** in `surface_temperature_K` and `planet_mass_jupiter_units`.  
+2. Implement different imputation methods:  
+   - Fill `surface_temperature_K` with the **mean** of similar planets (grouped by `detection_method`).  
+   - Fill `planet_mass_jupiter_units` using a **predictive regression model**.  
+3. Compare the **before and after** statistics to evaluate the impact of imputation.  
+
+ 
+

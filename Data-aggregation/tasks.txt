@@ -1,0 +1,61 @@
+Task 2: Data Aggregation (Ocean Temperature Data) 
+
+Dataset: ocean_temperature_data.csv 
+Tool: Pandas 
+
+Task: 
+
+    Load the CSV data into a  DataFrame. 
+
+    Group the data by the "region" column and calculate the average temperature per region. 
+
+    Filter the results to show only regions where the average temperature is above a certain threshold (e.g., 20°C). 
+
+    Display the result. 
+
+Expected Result: 
+
+    A  DataFrame showing regions with their corresponding average temperature. 
+
+    A filtered DataFrame where the average temperature is greater than 20°C. 
+
+#####################################################################################
+Task 2: Temperature Variability Analysis
+
+Task:
+
+    Load the CSV data into a DataFrame.
+
+    Group the data by the location column and calculate the standard deviation of temperature for each region. This will measure the variability in temperature.
+
+    Filter the results to show only regions where the temperature variability is above a certain threshold (e.g., 5°C).
+
+    Display the result.
+
+Expected Result:
+
+    A DataFrame showing regions with their corresponding temperature variability (standard deviation).
+
+    A filtered DataFrame where the temperature variability is greater than 5°C.
+
+#####################################################################################
+
+Task 3: Depth-Based Temperature Trends
+
+Task:
+
+    Load the CSV data into a DataFrame.
+
+    Group the data by both the location and depth columns.
+
+    Calculate the average temperature for each combination of region and depth.
+
+    Filter the results to show only depth levels where the average temperature is below a certain threshold (e.g., 10°C).
+
+    Display the result.
+
+Expected Result:
+
+    A DataFrame showing regions, depths, and their corresponding average temperatures.
+
+    A filtered DataFrame where the average temperature is below 10°C.
