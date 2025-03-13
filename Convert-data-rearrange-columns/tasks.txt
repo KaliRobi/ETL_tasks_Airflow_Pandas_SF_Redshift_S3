@@ -1,0 +1,20 @@
+Task 1: Data Transformation (Climate Data) 
+
+Dataset: climate_data.json 
+Tool: Pandas 
+
+Task: 
+
+    Load the JSON dataset into a Pandas DataFrame. 
+
+    Convert the "timestamp" column to a datetime type. 
+
+    Rename the column to reflect the change
+
+    Set the "timestamp" as the index for time-series analysis. 
+
+Expected Result: 
+
+    A DataFrame with individual columns for "temperature," "humidity," and "wind_speed," indexed by the "timestamp." 
+
+    Display the transformed DataFrame with a focus on the first few rows to verify. 

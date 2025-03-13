@@ -1,4 +1,4 @@
-Task 2: Data Aggregation (Ocean Temperature Data) 
+Task 1: Data Aggregation (Ocean Temperature Data) 
 
 Dataset: ocean_temperature_data.csv 
 Tool: Pandas 
