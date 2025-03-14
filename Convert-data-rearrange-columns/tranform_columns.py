@@ -1,26 +1,35 @@
 import pandas as pd
-    # Load the JSON dataset into a Pandas DataFrame. 
 
-df = pd.read_csv('../data/climate_data.csv')
+def load_data(file_path):
+    # Load CSV data into a DataFrame
+    return pd.read_csv(file_path)
 
-    # Convert the "timestamp" column to a datetime type.
+def process_data(df):
+    # Convert 'time' column to datetime format
+    df['time'] = pd.to_datetime(df['time'])
 
-df['time'] = pd.to_datetime(df['time'])
+    # Rename 'time' column to 'datetime'
+    df = df.rename(columns={'time': 'datetime'})
 
- 
-    # Rename the column to reflect the change
-df = df.rename(columns={'time': 'datetime'})
+    # Set 'datetime' as the index for time-series analysis
+    df.set_index('datetime', inplace=True)
 
-    # Set the "timestamp" as the index for time-series analysis. 
+    # Select specific columns for analysis
+    return df[['temperature', 'humidity', 'wind_speed']]
 
-df.set_index('datetime', inplace=True)
+def main():
+    # Define file path and load data
+    input_file = '../data/climate_data.csv'
+    df = load_data(input_file)
 
-    #  A DataFrame with individual columns for "temperature," "humidity," and "wind_speed," indexed by the "timestamp." 
+    # Process the data and extract relevant columns
+    new_df = process_data(df)
 
-new_df = df[['temperature', 'humidity', 'wind_speed' ]]
+    # Display the first few rows of the cleaned data
+    print(new_df.head(5))
 
+    # Return the processed DataFrame
+    return new_df
 
-    # Display the transformed DataFrame with a focus on the first few rows to verify. 
-
-
-print(new_df.head(5))
+if __name__ == "__main__":
+    main()

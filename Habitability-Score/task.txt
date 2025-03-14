@@ -1,0 +1,22 @@
+Task 1: Habitability Score Calculation & Normalization 
+
+Goal: Engineer a new feature, habitability_score, using multiple columns and normalize it. 
+
+Steps: 
+
+    Define a habitability score based on:  
+
+    Surface temperature (closer to Earth's ~288K is better) 
+
+    Water presence probability (higher is better) 
+
+    Atmospheric composition (give weights to O2-N2 > CO2 > H2-He > Unknown) 
+
+    Gravitational force (closer to Earth's 1G is better) 
+
+    Combine these factors into a formula to compute a habitability_score.   Normalize the score between 0 and 1 using Min-Max scaling. 
+
+The four parameters provided—**surface temperature, water presence probability,
+atmospheric composition, and gravitational force—**serve as strong indicators 
+of whether a planet can support life as we understand it. A habitability score
+should integrate these factors in a way that reflects their scientific significance.
