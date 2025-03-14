@@ -1,7 +1,7 @@
 import pandas as pd
 
 #    Load the CSV dataset into a Pandas DataFrame. 
-df = pd.read_csv('../data/climate_data.csv ')
+df = pd.read_csv('../data/climate_data.csv')
 
 # Check for any missing values in the columns. 
 
@@ -22,6 +22,8 @@ df = df.drop(df[df['time'].isna()].index)
 
 #Print the count of missing values in each column after cleaning.
 print(df.head(5))
+
+
 
 
 
