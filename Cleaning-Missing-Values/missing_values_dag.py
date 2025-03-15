@@ -1,7 +1,6 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.snowflake.hooks.snowflake import SnowflakeHook
-from airflow.providers.snowflake.operators.snowflake import SnowflakeOperator
 from datetime import datetime, timedelta
 import logging
 import pandas as pd
@@ -17,10 +16,10 @@ default_args = {
 
 # Initialize  DAG
 with DAG(
-    'clean missing values dag',
+    'clean-missing-values-dag',
     default_args=default_args,
     description='this Dag excutes the first task Cleaning-Missing-Values',
-    schedule_interval='@daily',  # Adjust as per your needs
+    schedule='@daily',  
     tags=['data-transformation'],
     catchup=False
 ) as dag:
@@ -78,7 +77,7 @@ with DAG(
         ti = kwargs['ti']
         cleaned_data_path = ti.xcom_pull(task_ids='clean_data', key="cleaned_data_path")
 
-        snowflake_hook = SnowflakeHook(snowflake_conn_id='my_snowflake_conn')
+        snowflake_hook = SnowflakeHook(snowflake_conn_id='snowflake_conn')
         # put csv to the external stage
         snowsql_put = f"PUT file://{cleaned_data_path} @mis_project"
         snowflake_hook.run(snowsql_put )
@@ -86,7 +85,7 @@ with DAG(
         # copy the data into the designated table from stage
         
         copy_sql = f"""
-        COPY INTO  miss_data.data.missing_values_cleaned
+        COPY INTO  climate_data.climate.missing_values_cleaned
         FROM @mis_project/cleaned_data.csv
         FILE_FORMAT = (TYPE = CSV);
         """
