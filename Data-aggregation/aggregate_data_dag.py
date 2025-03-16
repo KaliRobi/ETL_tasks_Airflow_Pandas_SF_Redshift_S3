@@ -1,6 +1,7 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-
+from airflow.providers.amazon.aws.hooks.s3 import S3Hook
+from airflow.providers.amazon.aws.operators.redshift_sql import RedshiftSQLOperator
 from datetime import datetime, timedelta
 import pandas as pd
 import logging
@@ -24,25 +25,16 @@ with DAG(
 ) as agg_dag:
 
     def extract_data(**kwargs):
-
         extracted_data = pd.read_csv('../data/ocean_temperature_data.csv')
-
         extract_data_path = 'tmp/ocean_temperature_raw.csv'
-
         extract_data.to_csv(extract_data_path, index=False)
-
         kwargs['ti'].xcom_push(key='extracted_data', value=extract_data_path)
-
         logging.info('data extracted')
 
     def extract_data_source_b(**kwargs):
-
         extract_data = pd.read_json('../data/ocean_temperature_data.json')
-
         temp_data_path_b = '/tmp/ocean_temperature_data_temp.csv'
-
         extract_data.to_csv(temp_data_path_b, index=False)
-
         kwargs['ti'].xcom_push(key='extract_data_b', value=temp_data_path_b)
 
     extract_data_task = PythonOperator(
@@ -75,9 +67,7 @@ with DAG(
         raw_1 = pd.read_csv(raw_1_path)
         raw_2 = pd.read_csv(raw_2_path)
         merge_raw_data = pd.concat([raw_1, raw_2], axis=0).drop_duplicates()
-
         merge_raw_data.to_csv(raw_data_path)
-
         ti.xcom_push(key='merge_raw_data', value=raw_data_path)
 
     merge_raw_data = PythonOperator(
@@ -145,9 +135,7 @@ with DAG(
             'temperature'].mean()
 
         below_critical_locations = grouped_temp[grouped_temp > 15]
-
         below_critical_locations.to_csv(tmp_temperature_data_path, index=False)
-
         ti.xcom_push(key='data_mart_c', value=tmp_temperature_data_path)
 
     data_mart_c_task = PythonOperator(
@@ -159,7 +147,40 @@ with DAG(
 
     def sink_marts(**kwargs):
         ti = kwargs['ti']
-        # will do this part tomorrow
+        s3_hook = S3Hook(aws_conn_id='aws_default')
+        redshift_hook = RedshiftSQLOperator(
+            task_id='load_to_redshift',
+            redshift_conn_id='redshift_default',
+            autocommit=True
+        )
+
+        # Upload and load each data mart
+        for mart_key in ['data_mart_a', 'data_mart_b', 'data_mart_c']:
+            mart_path = ti.xcom_pull(task_ids=f'{mart_key}_task', key=mart_key)
+            s3_key = f'{mart_key}.csv'
+            s3_bucket = ''
+
+            # upload to S3
+            s3_hook.load_file(
+                filename=mart_path,
+                key=s3_key,
+                bucket_name=s3_bucket,
+                replace=True
+            )
+           
+
+            # load into Redshift
+            copy_query = f"""
+                COPY aggregated_data
+                FROM 's3://{s3_bucket}/{s3_key}'
+                IAM_ROLE 'arn:aws:iam::123456789012:role/etl-redshift-role'
+                FORMAT AS CSV
+                IGNOREHEADER 1
+                DELIMITER ','
+            """
+            redshift_hook.sql = copy_query
+            redshift_hook.execute(context=kwargs)
+            logging.info(f"Loaded {mart_key} into Redshift")
 
     sink_marts_task = PythonOperator(
         task_id='sink_marts_task',
