@@ -1,6 +1,8 @@
 import pandas as pd
+import numpy as np
 import os
 import datetime
+
 
 
 esg = pd.read_csv(r'data/esg_scores.csv')
@@ -19,7 +21,7 @@ print(merge_table.columns)
 
 #     The number of companies in each industry.
 
-companies_per_industry = merge_table['company_id'].groupby(merge_table['industry']).count()
+companies_per_industry = merge_table['company_id'].groupby(merge_table['industry']).count().reset_index()
 
 # print(companies_per_industry)
 
@@ -50,12 +52,34 @@ ncc_lst_year_emission = non_compilant_company[
     ][['company_id','company_name','total_emissions_tons', 'esg_rating',  'year']].reset_index(drop=True)
 
 
-print(ncc_lst_year_emission)
-#     Any trends in compliance failures by industry."
-                # Are some industries consistently failing to report ESG data more often than others?
-                # Is non-compliance increasing or decreasing in specific industries over time?
-                # Are industries with low ESG scores also the ones failing compliance more frequently?
+# print(ncc_lst_year_emission)
+# Any trends in compliance failures by industry."
+# Are some industries consistently failing to report ESG data more often than others?
+grouped_by_industry = merge_table.groupby(['industry'])['reporting_compliance']
+industry_trend_on_reporting = grouped_by_industry.value_counts().unstack(fill_value=0)['No'] /  grouped_by_industry.count()  
+least_reproting_industries =industry_trend_on_reporting.sort_values(ascending=False).head(int(np.ceil(industry_trend_on_reporting.count() / 2 )))
 
+ 
+# Is non-compliance increasing or decreasing in specific industries over time?
+
+sorted_by_time_idustry = merge_table[['reporting_compliance','industry', 'year']].groupby(['industry', 'year' ]).value_counts().unstack(fill_value=0).sort_values(['industry'])
+sorted_by_time_idustry['total'] =  merge_table.groupby(['industry', 'year' ]).count()['company_id']
+sorted_by_time_idustry['rate'] =  (sorted_by_time_idustry['No'] /  sorted_by_time_idustry['total']).round(2)
+result_table = sorted_by_time_idustry.drop(columns='Yes')
+
+
+# Are industries with low ESG scores also the ones failing compliance more frequently?
+
+
+is_failing_equals_low_score = merge_table.groupby(['industry', 'esg_rating']).size().reset_index(name='count')
+is_failing_equals_low_score['total'] = is_failing_equals_low_score.groupby('industry')['count'].transform('sum')# 
+
+is_failing_equals_low_score['rate'] = (is_failing_equals_low_score['count'] / is_failing_equals_low_score['total']).round(2)
+
+is_failing_equals_low_score = is_failing_equals_low_score.sort_values(by='rate', ascending=False)
+
+
+print(is_failing_equals_low_score)
 # 3. Industry-Wide ESG Benchmarking
 
 # "We want to compare ESG performance across industries. Generate:
