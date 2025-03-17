@@ -72,21 +72,43 @@ result_table = sorted_by_time_idustry.drop(columns='Yes')
 
 
 is_failing_equals_low_score = merge_table.groupby(['industry', 'esg_rating']).size().reset_index(name='count')
-is_failing_equals_low_score['total'] = is_failing_equals_low_score.groupby('industry')['count'].transform('sum')# 
+is_failing_equals_low_score['total'] = is_failing_equals_low_score.groupby('industry')['count'].transform('sum')
 
-is_failing_equals_low_score['rate'] = (is_failing_equals_low_score['count'] / is_failing_equals_low_score['total']).round(2)
+is_failing_equals_low_score['rate'] = (is_failing_equals_low_score['count'] / is_failing_equals_low_score['total']).round(3)
 
 is_failing_equals_low_score = is_failing_equals_low_score.sort_values(by='rate', ascending=False)
 
 
-print(is_failing_equals_low_score)
+# print(is_failing_equals_low_score)
 # 3. Industry-Wide ESG Benchmarking
 
-# "We want to compare ESG performance across industries. Generate:
+# "We want to compare ESG performance across industries. 
 
 #     The average environmental score per industry.
+
+ave_env_score_industry = merge_table[['industry', 'environment_score']].groupby('industry').mean().round(3).sort_values('environment_score', ascending=False)
+
+# print(ave_env_score_industry)
 #     The total sustainability budget per country.
-#     Insights on whether any industries significantly lag behind in governance scores."_
+
+total_sustainability_budget = merge_table[['country', 'sustainability_budget_million' ]].groupby('country').count().sort_values('sustainability_budget_million', ascending=False)
+# print(total_sustainability_budget)s
+#     Insights on whether any industries significantly lag behind in governance scores."
+# z-score
+
+industry_means = merge_table.groupby('industry')['governance_score'].mean()
+
+significant_lag = industry_means.to_frame().rename(columns={'governance_score': 'mean_gov_score_per_industry'})
+
+av_all = significant_lag['mean_gov_score_per_industry'].mean()
+standard_dev = significant_lag['mean_gov_score_per_industry'].std()
+significant_lag['z-score'] = ((significant_lag['mean_gov_score_per_industry'] - av_all) / standard_dev).round(4)
+
+# Sort by Z-score
+print(significant_lag.sort_values('z-score', ascending=False))
+
+
+
 
 # 4. Sustainability Trend Analysis
 
