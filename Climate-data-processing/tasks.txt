@@ -1,0 +1,112 @@
+Task 1: Filtering Data (Ocean Temperature Data) 
+
+Dataset: ocean_temperature_data.json 
+Tool: Pandas 
+
+Task: 
+
+    Load the JSON data into a Pandas DataFrame. 
+
+    Filter the data to show only the rows where the temperature exceeds 10°C. 
+
+    Convert the "date" column to a proper datetime format and sort the DataFrame by date. 
+
+Expected Result: 
+
+    A filtered DataFrame showing only the rows with a temperature above 10s°C, sorted by date. 
+
+    Display the first 5 rows of the filtered DataFrame. 
+
+#####################################################################
+
+Task 2: Date and Time Transformation (Climate Data) 
+
+Dataset: climate_data.csv 
+Tool: Pandas 
+
+Task: 
+
+    Load the CSV file into a Pandas DataFrame. 
+
+    Convert the "timestamp" column into a proper datetime format. 
+
+    Create a new column showing the "month" extracted from the timestamp. 
+
+    Filter the data to show records only from the last three months. 
+
+Expected Result: 
+
+    A Pandas DataFrame with a new column for "month." 
+
+    Display the filtered records from the last three months. 
+
+Shape 
+
+Task 3: Pivot Table (Climate Data) 
+
+Dataset: climate_data.csv 
+Tool: Pandas 
+
+Task: 
+
+    Load the CSV data into a Pandas DataFrame. 
+
+    Pivot the table to show the average temperature per month for each region. 
+
+    Ensure the data is aggregated correctly and display the result. 
+
+Expected Result: 
+
+    A pivot table with rows as regions and columns as months, showing the average temperature for each region per month. 
+
+Shape 
+
+Task 4: Time Series Analysis (Ocean Temperature Data) 
+
+Dataset: ocean_temperature_data.csv 
+Tool: Pandas 
+
+Task: 
+
+    Load the dataset into Pandas. 
+
+    Create a time series with "date" as the index and "temperature" as the value. 
+
+    Resample the data to show the weekly average temperature. 
+
+    Plot the time series of weekly average temperatures. 
+
+Expected Result: 
+
+    A Pandas time series with resampled weekly average temperatures. 
+
+    A plot of the time series data showing the trend. 
+
+Shape 
+
+Task 5: Sorting and Filtering (Ocean Temperature Data) 
+
+Dataset: ocean_temperature_data.json 
+Tool: Pandas 
+
+Task: 
+
+    Load the JSON data into a Pandas DataFrame. 
+
+    Filter the data to show only records from the region "North Atlantic." 
+
+    Sort the records by temperature in descending order. 
+
+Expected Result: 
+
+    A DataFrame showing only records from the "North Atlantic" region, sorted by temperature in descending order. 
+
+    Display the first few rows. 
+
+Shape 
+
+ 
+
+ 
+
+ 
