@@ -108,8 +108,6 @@ significant_lag['z-score'] = ((significant_lag['mean_gov_score_per_industry'] - 
 print(significant_lag.sort_values('z-score', ascending=False))
 
 
-
-
 # 4. Sustainability Trend Analysis
 
 # "We’re analyzing how companies have progressed in renewable energy adoption. Please identify:

@@ -59,3 +59,25 @@ Expected Result:
     A DataFrame showing regions, depths, and their corresponding average temperatures.
 
     A filtered DataFrame where the average temperature is below 10°C.
+
+
+Task 5: Data Aggregation (Climate Data) 
+
+Dataset: climate_data.json 
+Tool: Pandas 
+
+Task: 
+
+    Load the JSON dataset into a DataFrame. 
+
+    Group the data by "region" and calculate the average humidity per region. 
+
+    Filter regions with an average humidity of more than 60%. 
+
+    Show the results in ascending order of average humidity. 
+
+Expected Result: 
+
+    A  DataFrame showing regions and their average humidity, filtered for regions with humidity > 60%. 
+
+    Display the filtered and sorted result. 
