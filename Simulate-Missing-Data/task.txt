@@ -1,0 +1,16 @@
+Task 5: Simulating Missing Data and Imputation Strategies 
+
+Goal: Introduce missing values and practice different imputation techniques. 
+
+Steps: 
+
+    Randomly drop values in surface_temperature_K and planet_mass_jupiter_units. 
+
+    Implement different imputation methods:  
+
+    Fill surface_temperature_K with the mean of similar planets (grouped by detection_method). 
+
+    Fill planet_mass_jupiter_units using a predictive regression model. 
+
+    Compare the before and after statistics to evaluate the impact of imputation. 
+
