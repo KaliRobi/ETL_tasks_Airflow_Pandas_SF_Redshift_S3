@@ -1,0 +1,126 @@
+---
+
+## **1. Extract the captives dataset**  
+Load the dataset from the CSV file into a DataFrame.
+Ensure all columns have appropriate data types (e.g., dates as datetime, numbers as int/float).
+Identify and handle missing values, duplicates, and potential inconsistencies in the data.
+Display basic statistics and metadata, such as column types, unique values, and descriptive statistics.  
+
+---
+
+## **2. Handle missing and inconsistent data**  
+- Identify columns with missing values (`special_peculiarities`, `associates`, `notes`) and determine:  
+  - Should they be dropped?  
+  - Should missing values be replaced (e.g., "Unknown")?  
+  - Should they be flagged for manual review?  
+- Normalize categorical fields (`sex`, `religion`, `marital_status`) by:  
+  - Checking for typos (`"rk"` vs `"r.k."`)  
+  - Unifying variations of the same category  
+- Convert all date-related columns into **datetime** format and check for inconsistencies (e.g., `sentence_begins` before `date_of_birth`).  
+
+---
+
+## **3. Calculate the age of each captive at the time of arrest**  
+- Create a new column `age_at_arrest` by subtracting `date_of_birth` from `sentence_begins`.  
+- Ensure no negative or unrealistic ages (e.g., someone arrested at age **2**).  
+
+---
+
+## **4. Compute sentence duration in multiple formats**  
+- Add a column `sentence_length_days` directly from `prison_term_day`.  
+- Create two additional columns:  
+  - `sentence_length_months` → Divide by **30** (rounding properly).  
+  - `sentence_length_years` → Divide by **365** (rounding properly).  
+- Analyze how often sentences **do not match** their expected duration (e.g., `sentence_expires` vs. calculated prison term).  
+
+---
+
+## **5. Classify crimes based on severity**  
+- Use the `crime` and `degree_of_punishment` fields to categorize each record into:  
+  - **Minor offenses** → petty theft, minor financial crimes, regulatory violations  
+  - **Moderate offenses** → fraud, tax evasion, moderate theft  
+  - **Severe offenses** → violent crimes, large-scale fraud  
+- Store this classification in a new column `crime_severity`.  
+
+---
+
+## **6. Identify repeat offenders**  
+- Detect individuals who appear **multiple times** in the dataset using their **name, date of birth, and place of birth**.  
+- Create a column `repeat_offender_flag` that marks offenders who appear more than once.  
+- Group by individual and count how many **different crimes** they committed over the years.  
+
+---
+
+## **7. Analyze crime frequency over time**  
+- Count the **number of arrests per year** using `sentence_begins`.  
+- Create a **trend graph** using Matplotlib/Seaborn to visualize crime trends between **1930-1940**.  
+- Identify if crime spikes correlate with **historical events** (economic crisis, war, etc.).  
+
+---
+
+## **8. Compare demographics across different crimes**  
+- Group by `crime_severity` and analyze distributions for:  
+  - **Age** (Are younger or older people more likely to commit certain crimes?)  
+  - **Gender** (Are certain crimes gender-skewed?)  
+  - **Education level** (Are literacy and crime related?)  
+
+---
+
+## **9. Find the five most common crimes**  
+- Use Pandas' `value_counts()` on the `crime` column.  
+- Find out which crimes **resulted in the longest average sentences**.  
+- Identify if there are **differences in sentencing** for men vs. women.  
+
+---
+
+## **10. Compare sentences of different social classes**  
+- Analyze **whether different occupations correlate with sentencing lengths**.  
+- Check if people with **higher education** or "prestigious" jobs (merchants, civil servants) received **less severe sentences** than laborers.  
+- Create a report showing average sentence length per occupation.  
+
+---
+
+## **11. Detect outliers and anomalies**  
+- Look for **unrealistic data points**, such as:  
+  - **People with negative or zero height**  
+  - **Prison terms longer than 50 years**  
+  - **Ransom values that are extremely high or low** compared to the median  
+- Use **boxplots** to visualize outliers and flag questionable records.  
+
+---
+
+## **12. Set up an Airflow DAG for automated data ingestion and cleaning**  
+- Create an **Airflow DAG** with the following tasks:  
+  - Extract data from PostgreSQL  
+  - Clean and transform the data (handle missing values, fix dates, standardize categories)  
+  - Store the cleaned data into a **new PostgreSQL table**  
+  - Generate a summary log file  
+- Schedule the DAG to run **daily**.  
+
+---
+
+## **13. Automate anomaly detection with Airflow**  
+- Build an **Airflow task** that:  
+  - Checks for negative ages, missing crime descriptions, or invalid dates  
+  - Logs suspicious records into a separate **"quarantine" table** for manual review  
+- If the DAG finds **critical issues**, send an **alert email**.  
+
+---
+
+## **14. Create a summary report and export it as a CSV**  
+- Generate a final report summarizing key insights:  
+  - **Total arrests per year**  
+  - **Most common crimes**  
+  - **Average sentence duration**  
+  - **Crime severity distribution**  
+- Save it as a `.csv` file and upload it to **Amazon S3** (if available).  
+
+---
+
+## **15. Create a visualization dashboard (Bonus)**  
+- Use **Streamlit** or **Dash** to build an interactive dashboard displaying:  
+  - Crime trends over time  
+  - Sentence length by crime type  
+  - Demographic breakdowns (age, gender, literacy)  
+- Allow users to filter by **year**, **crime type**, and **demographics**.  
+
