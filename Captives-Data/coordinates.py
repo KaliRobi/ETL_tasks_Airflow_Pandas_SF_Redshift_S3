@@ -31,20 +31,29 @@ def df_to_elastic(df, index_name):
     for _, row in df.iterrows():
         yield {
             "_index": index_name,
-            "_source": row.to_dict()
+            "_source": {
+                "location_name": row["location_name"],
+                "longitude": row["longitude"],
+                "latitude": row["latitude"],
+                "location": {  
+                    "lat": row["latitude"],
+                    "lon": row["longitude"]
+                }
+            }
         }
 
 
-dfp['locations'] = df['place_of_residence'].unique()
+dfp['location_name'] = df['place_of_residence'].unique()
 
-coords['locations'] = df['place_of_birth'].unique()
+coords['location_name'] = df['place_of_birth'].unique()
 
 # concat all values where location data is present
-coords['locations'] = pd.concat([dfp['locations'].str.strip(),coords['locations'].str.strip()] ).drop_duplicates().reset_index(drop=True)
+coords['location_name'] = pd.concat([dfp['location_name'].str.strip(),coords['location_name'].str.strip()] ).drop_duplicates().reset_index(drop=True)
 
 #apply the function
-coords[['place_of_birth_lon', 'place_of_birth_lat']] = coords['locations'].apply(location_coordinates).apply(pd.Series)
+coords[['longitude', 'latitude']] = coords['location_name'].apply(location_coordinates).apply(pd.Series)
 
+coords['location']= coords.apply(lambda row: (row['longitude'], row['latitude']), axis=1)
 #create bulk format        
 def df_to_elastic(df, index_name):
     for _, row in df.iterrows():
@@ -55,11 +64,11 @@ def df_to_elastic(df, index_name):
 
 mappings = {
     "mappings": {
-        "settings": {"number_of_shards": 1, "number_of_replicas": 0},
         "properties": {
-            "location": {"type": "keyword"},
+            "location_name": {"type": "keyword"},
             "longitude": {"type": "float"},
-            "latitude": {"type": "float"}
+            "latitude": {"type": "float"},
+            "location": {"type": "geo_point" }
         }
     }
 }
