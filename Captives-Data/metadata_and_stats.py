@@ -2,39 +2,81 @@ import pandas as pd
 from geopy.geocoders import Nominatim
 from elasticsearch import Elasticsearch
 
-## **1. Extract the captives dataset**  
-# Load the dataset from the CSV file into a DataFrame.
+
+## sink to ELK
 
 df = pd.read_csv('data/captives.csv', encoding='utf-8')
 
 
-def location_coordinates(location):
-
-    loc = Nominatim(user_agent="GetLoc")
-    coordinates = []
-    
-    try:
-
-        getLoc = loc.geocode(location)
-        coordinates.append(getLoc.longitude)
-        coordinates.append(getLoc.latitude)
-        print(coordinates)
-        return coordinates
-        
-    except:
-        print([0,0])
-        return [0,0]
+es = Elasticsearch('http://localhost:9200')
         
 coords = pd.DataFrame()
 
-coords['locations'] = df['date_of_birth'].unique()
+query= {
+    "size": 1000,
+    "query":{
+        "match_all": {}
+   }
+}
 
-coords[['place_of_birth_lon', 'place_of_birth_lat']] = coords['locations'].apply(location_coordinates)
+es_index = es.search(index="location_coordinates", body=query )
+
+coords = pd.DataFrame( doc["_source"] for doc in es_index['hits']['hits'] )
 
 
-# print(df.columns)
-# Ensure all columns have appropriate data types (e.g., dates as datetime, numbers as int/float).
+# need the mapig
 
+mapping = {
+    "mappings":{
+            "properties":{
+                "volume" : {"type": "integer" },
+                "id": {"type": "text" },
+                "name" : {"type": "text" },
+                "sex" : {"type": "keyword" },
+                "height" : {"type": "integer" },
+                "build" : {"type": "keyword" },
+                "dentition": {"type": "keyword"},
+                "special_peculiarities" :{"type": "text" },
+                "age" : {"type": "integer" },
+                "date_of_birth" : {"type": "text" },
+                "place_of_birth" : {"type": "text" },
+                "place_of_birth_coo" : {"type": "geo_point" },
+                "place_of_residence" : {"type": "text" },
+                "place_of_residence_coo" : {"type": "geo_point" },
+                "residence" : {"type": "text" },
+                "religion": {"type": "keyword"},
+                "childhood_status" : {"type": "keyword"},
+                "marital_status" : {"type": "keyword"},
+                "number_of_children": {"type": "integer" },
+                "occupation" : {"type": "keyword"},
+                "occupation_2" : {"type": "keyword"},
+                "occupation_3" : {"type": "keyword"},
+                "military_service" :{"type": "text" },
+                "literacy" : {"type": "keyword"},
+                "education" : {"type": "keyword"},
+                "criminal_history": {"type": "text" },
+                "crime": {"type": "keyword"},
+                "sentence_begins": {"type": "text" },
+                "sentence_expires": {"type": "text" },
+                "prison_term_day" : {"type": "integer" },
+                "ransom" : {"type": "float" },
+                "associates" : {"type": "text" },
+                "degree_of_crime" : {"type": "text" },
+                "degree_of_punishment" : {"type": "text" },
+                "notes" : {"type": "text" },
+                "arrest_site" : {"type": "text" }
+           }
+    }
+}
+
+
+
+
+
+
+
+
+#LIST OF COLUMNS
 # volume                     int64
 # id                        object
 # name                      object
@@ -47,7 +89,7 @@ df['height'] = pd.to_numeric(df['height'])
 # special_peculiarities     object
 
 # adding age, in some cases it was not possible to figure out the month and day of the month of the birthdate
-# date_of_birth, "1933-801"
+# age
 df['age_at_hearing'] = (
     pd.to_numeric(df['id'].str[:4], errors='coerce') -
     pd.to_numeric(df['date_of_birth'].str[:4], errors='coerce')).round(0).fillna(0).astype(int)
@@ -55,16 +97,24 @@ df['age_at_hearing'] = (
 # date_of_birth             object
 df['date_of_birth'] = pd.to_datetime(df['date_of_birth'].str.strip().str.replace(r'.', '-'), errors='coerce')
 
-print(df['age_at_hearing'])
-# place_of_birth            object
 
+# place_of_birth            object
+df = df.merge(coords, left_on="place_of_birth", right_on="location_name", how="left")
+df = df.rename(columns={"location": "place_of_birth_coo"}).drop(columns=["location_name",   "longitude",   "latitude"])
 
 # coordinates
-df[['place_of_birth_lon', 'place_of_birth_lat']] = df['place_of_birth'].apply(location_coordinates).apply(pd.Series)
+
 
 
 # place_of_residence        object
+
+df = df.merge(coords, left_on='place_of_residence', right_on='location_name', how='left')
+df = df.rename(columns={"location": "place_of_residence_coo"}).drop(columns=["location_name",   "longitude",   "latitude"])
+
+
 # residence                 object
+
+print(df['residence'])
 # religion                  object
 # childhood_status          object
 # marital_status            object
@@ -84,7 +134,7 @@ df['sentence_begins'] = pd.to_datetime(df['sentence_begins'].str.strip().str.rep
 
 # sentence_expires          object
 df['sentence_expires'] = pd.to_datetime(df['sentence_expires'].str.strip().str.replace('n.a', '' ).str.replace('-', '.'), errors='coerce'  )
-print(df['sentence_expires'] )
+
 # prison_term_day           object
 df['prison_term_day'] = pd.to_numeric(df['prison_term_day'], errors='coerce')
 
@@ -92,15 +142,14 @@ df['prison_term_day'] = pd.to_numeric(df['prison_term_day'], errors='coerce')
 df['ransome'] = pd.to_numeric(df['ransome'], errors='coerce').fillna(0)
 df.rename(columns={"ransome": "ransom"}, inplace=True)
 
-print(df['ransom'])
+# print(df['ransom'])
 # associates                object
 # degree_of_crime           object
 # degree_of_punishment      object
 # notes                     object
 # arrest_site               object
 
-
-
+# THEY ARE NOT NEEDED FOR TIS PROJECT
 # username                 float64
 # record_session           float64
 # created_at               float64
@@ -108,7 +157,3 @@ df.drop(['record_session', 'username', 'created_at' ], axis=1)
 
 
 
-
-
-# Identify and handle missing values, duplicates, and potential inconsistencies in the data.
-# Display basic statistics and metadata, such as column types, unique values, and descriptive statistics.  

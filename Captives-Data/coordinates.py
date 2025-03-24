@@ -47,20 +47,16 @@ dfp['location_name'] = df['place_of_residence'].unique()
 
 coords['location_name'] = df['place_of_birth'].unique()
 
-# concat all values where location data is present
+
+
+# # concat all values where location data is present
 coords['location_name'] = pd.concat([dfp['location_name'].str.strip(),coords['location_name'].str.strip()] ).drop_duplicates().reset_index(drop=True)
 
-#apply the function
+# #apply the function
 coords[['longitude', 'latitude']] = coords['location_name'].apply(location_coordinates).apply(pd.Series)
 
 coords['location']= coords.apply(lambda row: (row['longitude'], row['latitude']), axis=1)
-#create bulk format        
-def df_to_elastic(df, index_name):
-    for _, row in df.iterrows():
-        yield {
-            "_index": index_name,
-            "_source": row.to_dict()
-        }
+
 
 mappings = {
     "mappings": {
