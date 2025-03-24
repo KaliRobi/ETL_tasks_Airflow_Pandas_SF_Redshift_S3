@@ -91,13 +91,13 @@ def process_dataframe(df, index_name):
                 "date_of_birth" : row["date_of_birth"] ,
                 "place_of_birth" : row["place_of_birth"] ,
                 "place_of_birth_geo_point" : {
-                    "lat": row["place_of_birth_longitude"] ,
-                    "lon": row["place_of_birth_latitude"] 
+                    "lat": row["place_of_birth_latitude"], 
+                    "lon": row["place_of_birth_longitude"]
                 }, 
-                "place_of_residence" : row["place_of_residence"] ,
+                "place_of_residence" : row["place_of_residence"],
                 "place_of_residence_geo_point" : {
-                    "lat": row["place_of_residence_longitude"] ,
-                    "lon": row["place_of_residence_latitude"] 
+                    "lat": row["place_of_residence_latitude"],
+                    "lon": row["place_of_residence_longitude"]
                 }, 
                 "residence" : row["residence"] ,
                 "religion": row["religion"] ,
