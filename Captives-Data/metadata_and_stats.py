@@ -181,7 +181,7 @@ df.rename(columns={"ransome": "ransom"}, inplace=True)
 
 # THEY ARE NOT NEEDED FOR THIS PROJECT
 # username, record_session, created_at               
-df.drop(['record_session', 'username', 'created_at' ], axis=1)
+df = df.drop(['record_session', 'username', 'created_at' ], axis=1)
 
 
 helpers.bulk(es, process_dataframe(df, "captives_index"),

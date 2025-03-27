@@ -1,0 +1,198 @@
+Task 1: Data Cleaning and Normalization Pipeline
+
+Create a pipeline that:
+
+    Handles missing, inconsistent, and incorrect data (e.g., missing residence data, inconsistent date formats, missing occupation_2 and occupation_3).
+
+    Converts all dates into a consistent datetime format.
+
+    Normalizes categorical data (sex, religion, marital_status, etc.).
+
+    Outputs the clean dataset for analysis.
+
+
+        
+
+
+Task 2: Feature Engineering for Social Study
+
+Create additional features like:
+
+    Age at time of sentence.
+
+    Prison term in months/years.
+
+    Binary indicator for first-time offenders vs repeat offenders.
+
+    Crime severity score based on degree_of_crime and sentence.
+
+    A. Age at Time of Sentence (Expanded)
+
+            Feature: Instead of just calculating age at the time of sentence, break it down by age groups.
+
+                Example:
+
+                    Under 18, 18–30, 31–45, 46–60, Over 60.
+
+            Purpose: This allows analysis by generational group and reveals how crime and sentencing patterns varied by age in different eras.
+
+        B. Prison Term in Months/Years (Extended)
+
+            Feature: Calculate the mean sentence duration for different crime types (e.g., theft, alcohol-related crimes, etc.).
+
+                Purpose: Understand if certain crimes (like excise violations) led to significantly shorter or longer sentences compared to violent crimes.
+
+        C. Repeat Offender Indicator (Expanded)
+
+            Feature: Extend this by calculating the number of times an individual has been imprisoned.
+
+                Sub-feature: Create a recidivism risk score based on their criminal history (number of prior arrests, types of previous crimes).
+
+            Purpose: Research could focus on whether certain types of individuals (e.g., agricultural workers, illiterates) had higher rates of recidivism.
+
+        D. Crime Severity Score (Refined)
+
+            Feature: Create a multi-factor crime severity index combining:
+
+                Type of Crime (e.g., violent vs non-violent, excise violation).
+
+                Sentence length (short-term vs long-term).
+
+                Criminal history (first-time offenders vs repeat offenders).
+
+                Sentence Degree (light punishment, medium, severe).
+
+                Legal/Political Context: e.g., Were certain crimes more harshly punished under specific political regimes?
+
+            Purpose: Provides a nuanced view of crime severity, which could vary depending on the socio-political climate of the era.
+
+        E. Literacy and Education Impact
+
+            Feature: Correlate education with crime types and sentence lengths.
+
+                Sub-feature: Add education level as a numeric score (primary school, secondary school, etc.), and then compare how offenders with higher education levels were treated.
+
+                Purpose: This could reveal if higher education served as a deterrent to crime or led to lighter sentences.
+
+        F. Social Status & Crime Type
+
+            Feature: Combine the childhood_status and occupation data to create a Social Status Indicator (e.g., poor, middle-class, wealthy).
+
+                Combine this with the crime severity index.
+
+                Purpose: To see if the socio-economic background influenced the type of crimes individuals committed, as well as the severity of their punishment.
+
+        I. Geographic Crime Trends
+
+            Feature: Crime hotspots based on place_of_birth and place_of_residence.
+
+                Sub-feature: Group by regions, identify places with the highest concentration of crimes, and see if certain regions had more aggressive law enforcement or were more prone to specific types of crime.
+
+            Purpose: Helps uncover regional crime trends, like urban vs rural differences, or politically charged areas.
+
+        J. Gender and Crime
+
+            Feature: Gender-based crime types analysis (e.g., "women committing non-violent crimes" vs "men committing violent crimes").
+
+                Purpose: See if the gender distribution in crimes follows traditional patterns (more men committing violent crimes, more women committing property crimes, etc.) and whether societal norms played a role.
+
+        K. Marital Status Impact on Crime
+
+            Feature: Marital status correlated with crime frequency and crime severity.
+
+                Does being single, married, or widowed correlate with more severe or more frequent crimes?
+
+            Purpose: This would be a sociological exploration of how family structure impacted criminal behavior.
+
+        L. Military Service as a Deterrent
+
+            Feature: Indicator of whether having military service in their history correlates with lesser crime or more severe sentences.
+
+                Combine military service data with crime severity scores to identify patterns.
+
+            Purpose: Explore if there were any patterns in how individuals who served in the military were treated, either more leniently or harshly.
+
+        M. Crime Repetition within the Dataset
+
+            Feature: Identify individuals who were involved in multiple crimes over a period and analyze if there was a change in the type of crime committed over time.
+
+                Was the second or third crime of a similar nature or different from the first?
+
+            Purpose: Shows whether certain criminal paths were more repetitive or whether offenders evolved into more severe crime.
+
+        N. Parole or Sentence Adjustment (Conditional Release)
+
+            Feature: Create a parole eligibility indicator based on sentence expiration and sentence terms.
+
+                If a sentence ends early or is adjusted, track parole periods.
+
+            Purpose: This could provide insights into whether certain types of crimes were more likely to lead to parole, or if certain groups of people (e.g., women, the elderly) were more likely to be released early.
+
+
+
+
+Task 3: Build a Historical Sociological Dataset
+
+Aggregate data:
+
+    Analyze average sentence lengths by gender, occupation, religion, literacy, military service, and childhood status.
+
+    Group by place_of_birth or place_of_residence to spot geographic patterns in crime.
+
+    Extract trends like:
+
+        Were women punished differently?
+
+        Did certain occupations correlate with more/less criminal behavior?
+
+        Did education affect the likelihood of imprisonment?
+
+Tools:
+
+    pandas groupby + pivot + visualization
+
+    Airflow task that generates updated reports every time new data is ingested
+
+Task 4: Build a Time-Series Study of Crimes
+
+Create a time-series dataset:
+
+    Crimes committed per year.
+
+    Average sentence length over time.
+
+    Shifts in common crimes (e.g., rise or decline of jövedéki kihágás - excise crimes).
+
+This could result in an article like:
+"Crime and Punishment Patterns in Eastern Hungary, 1920–1940"
+
+Tools:
+
+
+Task 5: Build an ETL Pipeline
+
+    Extract data from multiple CSVs (assume more volumes will arrive).
+
+    Transform using the tasks above (cleaning, feature engineering).
+
+    Load into a historical research database or just export to Parquet/CSV for historians.
+
+Tools:
+
+
+
+Task 6 (Optional Advanced): Anomaly Detection
+
+    Detect outliers like:
+
+        Exceptionally long/short sentences.
+
+        Unusual occupations for criminals.
+
+        Rare crimes.
+
+    Flag them for manual review.
+
+This could lead to surprising findings for an academic article.
+
+
