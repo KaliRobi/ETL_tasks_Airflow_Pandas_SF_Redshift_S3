@@ -2,7 +2,7 @@ import pandas as pd
 from elasticsearch import Elasticsearch
 
 
-raw_data = pd.read_csv('../data/captives.csv')
+raw_data = pd.read_csv('data/captives.csv')
 raw_data = raw_data.drop(['username', 'record_session', 'created_at'], axis=1)
 int_data = pd.DataFrame()
 
@@ -25,9 +25,14 @@ int_data = int_data[(int_data['age'] > 6 )&
 
 group_by_sex = int_data.groupby('sex').count()
 
-cohorts = sorted(int_data['age'].unique())
+cohorts = int_data['age'].unique()
 
-print(cohorts)
+ages = [0, 20, 40, 60, 80, 100]
+labels = ["I", "II", "III", "IV", "V"]
+
+
+int_data['cohort'] = pd.cut(int_data['age'], bins=ages, labels=labels)
+print(int_data['cohort'])
 
 
 # B. Prison Term in Months/Years 
